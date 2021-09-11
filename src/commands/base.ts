@@ -29,6 +29,10 @@ export type CommandResponse =
   | null;
 
 export class Command {
+  static noPermissionError: Error = new Error(
+    "You do not have permission to run that command."
+  );
+  static noCommandError: Error = new Error("The given command does not exist.");
   info: CommandInfo;
   client: Client;
   constructor(info: CommandInfo) {
