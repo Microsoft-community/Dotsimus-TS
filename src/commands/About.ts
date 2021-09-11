@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, MessageEmbed, User } from "discord.js";
 import { Command, CommandResponse } from "./base";
 
 export default class AboutCommand extends Command {
@@ -37,7 +37,7 @@ export default class AboutCommand extends Command {
     });
   }
 
-  execute(interaction: CommandInteraction): CommandResponse {
+  async execute(interaction: CommandInteraction): Promise<CommandResponse> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case "me":
@@ -47,9 +47,11 @@ export default class AboutCommand extends Command {
       case "ping":
         return this.executePing(interaction);
       case "restart":
-        return this.executeRestart();
+        return await this.executeRestart(interaction);
       case "usage":
         return this.executeUsage();
+      default:
+        throw Command.unknownCommandError;
     }
   }
 
@@ -96,5 +98,27 @@ export default class AboutCommand extends Command {
   private executePing(interaction: CommandInteraction): CommandResponse {
     return `Websocket heartbeat: ${this.client.ws.ping}ms
     Roundtrip latency: ${Date.now() - interaction.createdTimestamp}`;
+  }
+
+  private async executeRestart(
+    interaction: CommandInteraction
+  ): Promise<CommandResponse> {
+    const owner = this.client.application?.owner;
+    if (!owner) {
+      throw new Error("Dotsimus cannot find the bot's owner.");
+    }
+    const userIsOwner =
+      owner instanceof User
+        ? owner.id === interaction.user.id
+        : !!owner.members.get(owner.id);
+    if (!userIsOwner) {
+      throw Command.noPermissionError;
+    }
+    await interaction.reply("Restarting...");
+    process.exit(0);
+  }
+
+  private executeUsage() {
+    return `Not yet implemented.`;
   }
 }
