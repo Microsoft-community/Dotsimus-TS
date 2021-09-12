@@ -1,15 +1,20 @@
 {
   "name": "dotsimus-ts",
   "version": "1.0.0",
+  "description": "The Dotsimus Discord moderation bot, rewritten in TypeScript.",
   "main": "build/index.js",
   "type": "module",
-  "repository": "https://github.com/Microsoft-community/Dotsimus-TS.git",
-  "author": "Dotsimus Contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft-community/Dotsimus-TS.git"
+  },
   "license": "GPL-3.0",
   "private": false,
   "scripts": {
-    "dev": "tsc && nodemon .",
-    "prod": "tsc && node ."
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "start": "node .",
+    "build": "tsc",
+    "prod": "npm run build && node ."
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.31.0",
@@ -21,9 +26,11 @@
     "ts-node": "^10.2.1"
   },
   "dependencies": {
+    "@typeit/discord": "^4.0.10",
     "@types/node": "^16.9.1",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
+    "envs": "^0.1.6",
     "typescript": "^4.4.2"
   }
 }
