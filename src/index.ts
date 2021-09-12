@@ -11,33 +11,35 @@ const dotsimus = new Client({
     Intents.FLAGS.GUILD_PRESENCES,
   ],
 });
+
 import { FormatString } from "./utils.js";
 
-const envNotProvided ="{0} not provided. Please confirm that the \".env\" file exists and the {1} variable is set.";
+const tokenENV = "DISCORD_TOKEN",
+devTokenENV = "DISCORD_TOKEN_DEV",
+unprovidedENVString = "{0} not provided. Please confirm that the \".env\" file exists and the {1} variable is set.";
 
-if (!process.env.NODE_ENV)
-{
-  throw new Error(
-    FormatString(envNotProvided, "NODE_ENV variable", "NODE_ENV")
-  );
+let nodeENV = process.env.NODE_ENV;
+
+if (!nodeENV) {
+  nodeENV = "production";
 }
 
-switch (process.env.NODE_ENV) {
+switch (nodeENV) {
   case "production":
-    if (!process.env.DISCORD_TOKEN) {
+    if (!process.env[tokenENV]) {
       throw new Error(
-        FormatString(envNotProvided, "Discord token", "DISCORD_TOKEN")
+        FormatString(unprovidedENVString, "Bot token", tokenENV)
       );
     }
-    dotsimus.login(process.env.DISCORD_TOKEN);
+    dotsimus.login(process.env[tokenENV]);
     break;
   case "development":
-    if (!process.env.DISCORD_TOKEN_DEV) {
+    if (!process.env[devTokenENV]) {
       throw new Error(
-        FormatString(envNotProvided, "Discord token", "DISCORD_TOKEN_DEV")
+        FormatString(unprovidedENVString, "Dev bot token", devTokenENV)
       );
     }
-    dotsimus.login(process.env.DISCORD_TOKEN_DEV);
+    dotsimus.login(process.env[devTokenENV]);
     break;
 }
 
@@ -45,7 +47,7 @@ dotsimus.on("ready", (client) => {
   dotsimus.emit("debug", `Connected to Discord as ${client.user.tag}`);
 });
 
-if (process.env.NODE_ENV === "development") {
+if (nodeENV == "development") {
   dotsimus.on("debug", (message) => {
     console.debug(message);
   });
