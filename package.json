@@ -1,7 +1,7 @@
 {
   "name": "dotsimus-ts",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "build/src/index.js",
   "type": "module",
   "repository": "https://github.com/Microsoft-community/Dotsimus-TS.git",
   "author": "Dotsimus Contributors",
@@ -20,9 +20,14 @@
     "prettier": "2.4.0"
   },
   "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@open-draft/until": "^1.0.3",
     "@types/node": "^16.9.1",
+    "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
+    "nanoid": "^3.1.25",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
   }

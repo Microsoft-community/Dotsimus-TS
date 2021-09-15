@@ -1,29 +1,23 @@
 import "./env.js";
-import { Client, Intents } from "discord.js";
-const dotsimus = new Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_TYPING,
-    Intents.FLAGS.GUILD_PRESENCES,
-  ],
-});
+import { DotsimusClient } from "./structs/DotsimusClient.js";
+import path from "node:path";
+
+const dotsimus = new DotsimusClient();
 
 if (!process.env.DISCORD_TOKEN) {
   throw new Error("Discord token not provided.");
 }
 
-dotsimus.login(process.env.DISCORD_TOKEN);
+async function main() {
+  await dotsimus.loadPlugins(path.join(process.cwd(), "src", "plugins"));
 
-dotsimus.on("ready", (client) => {
-  dotsimus.emit("debug", `Connected to Discord as ${client.user.tag}`);
-});
+  if (dotsimus.commander) {
+    await dotsimus.commander.loadCommands(path.join(process.cwd(), "src", "plugins", "commander", "commands"));
+  }
 
-if (process.env.NODE_ENV === "development") {
-  dotsimus.on("debug", (message) => {
-    console.debug(message);
-  });
+  dotsimus.login(process.env.DISCORD_TOKEN).catch();
 }
 
-export { dotsimus };
+void async function() {
+  await main();
+}();
