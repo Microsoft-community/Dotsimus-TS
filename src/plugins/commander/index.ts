@@ -9,7 +9,7 @@ import { Command } from "./structs/Command";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
-import { DotsimusError } from "../../structs/DotsimusError";
+import { DotsimusError } from "../../structs/DotsimusError.js";
 
 export default class CommanderPlugin extends Plugin {
 	load(): RunPlugin {
@@ -57,9 +57,10 @@ export class Commander extends RunPlugin {
 					body: slashCommands,
 				}
 			);
+
+			this.client.log.debug(`Registered ${commands.length} slash commands.`);
 		} catch(e) {
-			console.error("Failed while registering slash commands");
-			console.error(e);
+			this.client.log.error("Failed while registering slash commands", e);
 		}
 	}
 
@@ -72,8 +73,6 @@ export class Commander extends RunPlugin {
 		try {
 			command.execute(interaction);
 		} catch (e) {
-			console.log(`Failed while executing command ${command.name}`, e);
-
 			// User-facing error
 			if (e instanceof DotsimusError) {
 				// Example: Missing permissions or missing command
@@ -82,30 +81,28 @@ export class Commander extends RunPlugin {
 				});
 			} else {
 				// TODO
+				this.client.log.error(`Failed while executing command ${command.name}`, e);
 			}
 		}
 	}
 
 	loadCommand(CommandClass: typeof Command, name: string): void {
-		console.log(`Loading command ${name}.js`);
-
 		const command = new CommandClass(this.client);
 		this.commands.set(name, command);
+		this.client.log.debug(`Loaded command ${name}.js`);
 	}
 
 	async loadCommands(dir: string): Promise<void> {
-		const files = fs.readdirSync(dir).map(f => f.replace(/\.ts$/, ".js"));
+		const files = fs.readdirSync(dir).map(f => f.replace(/\.[tj]s$/, ""));
 
 		for (const file of files) {
-			const p = path.join(dir, file);
-			const name = file.replace(/\.js$/, "");
+			const p = path.join(dir, `${file}.js`);
 
 			try {
 				const Command = await import(p);
-				this.loadCommand(Command.default, name);
+				this.loadCommand(Command.default, file);
 			} catch (e) {
-				console.log(`Failure while parsing command: ${file}`);
-				console.log(e);
+				this.client.log.error(`Failure while parsing command: ${file}.js`, e);
 			}
 		}
 	}

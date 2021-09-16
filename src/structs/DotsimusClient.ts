@@ -1,15 +1,19 @@
 import "../env.js";
 import { Client, Intents } from "discord.js";
-import fs from "node:fs";
-import path from "node:path";
 import { Plugin } from "./Plugin";
 import { RunPlugin } from "./RunPlugin";
+import { logger } from "../logger.js";
 import { Commander } from "../plugins/commander";
+import pino from "pino";
+
+import fs from "node:fs";
+import path from "node:path";
 
 export class DotsimusClient extends Client {
 	plugins: RunPlugin[];
 	commander?: Commander;
 	#loggedIn: boolean;
+	log: pino.Logger = logger;
 
 	constructor() {
 		super({
@@ -30,7 +34,7 @@ export class DotsimusClient extends Client {
 	}
 
 	onReady(): void {
-		console.log("Ready.");
+		this.log.info("Ready.");
 	}
 
 	async loadPlugin(PluginClass: typeof Plugin): Promise<void> {

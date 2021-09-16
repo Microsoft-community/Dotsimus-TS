@@ -4,12 +4,13 @@ import {
 	MessagePayload,
 	WebhookEditMessageOptions,
 } from "discord.js";
-import { DotsimusClient } from "../../../structs/DotsimusClient";
-import { DotsimusError} from "../../../structs/DotsimusError";
+import { DotsimusClient } from "../../../structs/DotsimusClient.js";
+import { DotsimusError} from "../../../structs/DotsimusError.js";
 import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder,
 } from "@discordjs/builders";
+import pino from "pino";
 
 export type CommandResponse =
 	string
@@ -31,11 +32,13 @@ export class Command {
 	name: string;
 	description: string;
 	schema: Schema = new SlashCommandBuilder();
+	log: pino.Logger;
 
 	constructor(client: DotsimusClient) {
 		this.client = client;
 		this.name = "";
 		this.description = "";
+		this.log = this.client.log;
 	}
 
 	execute(
