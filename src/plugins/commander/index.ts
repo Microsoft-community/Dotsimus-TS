@@ -9,6 +9,7 @@ import { Command } from "./structs/Command";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
+import { DotsimusError } from "../../structs/DotsimusError";
 
 export default class CommanderPlugin extends Plugin {
 	load(): RunPlugin {
@@ -62,13 +63,27 @@ export class Commander extends RunPlugin {
 		}
 	}
 
-	onInteraction(interaction: Interaction): void {
+	async onInteraction(interaction: Interaction): Promise<void> {
 		if (!interaction.isCommand()) return;
 
 		const command = this.commands.find(c => c.name === interaction.commandName);
 		if (!command) return;
 
-		command.execute(interaction);
+		try {
+			command.execute(interaction);
+		} catch (e) {
+			console.log(`Failed while executing command ${command.name}`, e);
+
+			// User-facing error
+			if (e instanceof DotsimusError) {
+				// Example: Missing permissions or missing command
+				await interaction.reply({
+					content: e.message || "Error occurred while executing command.",
+				});
+			} else {
+				// TODO
+			}
+		}
 	}
 
 	loadCommand(CommandClass: typeof Command, name: string): void {
