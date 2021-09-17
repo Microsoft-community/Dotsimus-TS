@@ -11,10 +11,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "node --loader ts-node/esm src/index.ts",
+    "dev": "node --experimental-json-modules --loader ts-node/esm src/index.ts",
     "start": "node .",
     "build": "tsc",
-    "prod": "npm run build && node ."
+    "prod": "yarn build && node ."
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.31.0",
