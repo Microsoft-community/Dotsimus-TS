@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "./env.js";
 
 import { Client, Intents } from "discord.js";
 const dotsimus = new Client({
@@ -12,43 +11,25 @@ const dotsimus = new Client({
   ],
 });
 
-import { FormatString } from "./utils.js";
 
-const tokenENV = "DISCORD_TOKEN",
-devTokenENV = "DISCORD_TOKEN_DEV",
-unprovidedENVString = "{0} not provided. Please confirm that the \".env\" file exists and the {1} variable is set.";
-
-let nodeENV = process.env.NODE_ENV;
-
-if (!nodeENV) {
-  nodeENV = "production";
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'production';
 }
 
-switch (nodeENV) {
-  case "production":
-    if (!process.env[tokenENV]) {
-      throw new Error(
-        FormatString(unprovidedENVString, "Bot token", tokenENV)
-      );
-    }
-    dotsimus.login(process.env[tokenENV]);
-    break;
-  case "development":
-    if (!process.env[devTokenENV]) {
-      throw new Error(
-        FormatString(unprovidedENVString, "Dev bot token", devTokenENV)
-      );
-    }
-    dotsimus.login(process.env[devTokenENV]);
-    break;
+if (!process.env.BOT_TOKEN) {
+  throw new Error(
+    "Bot token not supplied. Please confirm it is set in the .env file!"
+  );
 }
 
-dotsimus.on("ready", (client) => {
-  dotsimus.emit("debug", `Connected to Discord as ${client.user.tag}`);
+dotsimus.login(process.env.BOT_TOKEN);
+
+dotsimus.on('ready', (client) => {
+  dotsimus.emit('debug', `Connected to Discord as ${client.user.tag}`);
 });
 
-if (nodeENV == "development") {
-  dotsimus.on("debug", (message) => {
+if (process.env.NODE_ENV == 'development') {
+  dotsimus.on('debug', (message) => {
     console.debug(message);
   });
 }
