@@ -4,11 +4,6 @@
 
 ### Node
 
-# Lockfiles
-
-yarn.lock
-package-lock.json
-
 # Build
 
 build/
