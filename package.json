@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/Microsoft-community/Dotsimus-TS.git"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "private": false,
   "scripts": {
     "dev": "node --loader ts-node/esm src/index.ts",
