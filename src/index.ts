@@ -1,8 +1,6 @@
 import "./env.js";
 
 import { Client, Intents } from "discord.js";
-import { FormatString } from "./utils/index.js";
-import strings from './utils/strings.json';
 const dotsimus = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -13,15 +11,17 @@ const dotsimus = new Client({
   ],
 });
 
+let UnsuppliedENV;
 if (!process.env.NODE_ENV) {
-  throw new Error(
-    FormatString(strings.UnsuppliedENV, "Run environment", "NODE_ENV")
-  );
+  UnsuppliedENV = "NODE_ENV"
+}
+if (!process.env.BOT_TOKEN) {
+  UnsuppliedENV = "BOT_TOKEN"
 }
 
-if (!process.env.BOT_TOKEN) {
+if (UnsuppliedENV !== undefined) {
   throw new Error(
-    FormatString(strings.UnsuppliedENV, "Bot token", "BOT_TOKEN")
+    `${UnsuppliedENV} not set. Please confirm that the ".env" file exists and that all required variables are set.`
   );
 }
 
@@ -31,7 +31,7 @@ dotsimus.on("ready", (client) => {
   dotsimus.emit("debug", `Connected to Discord as ${client.user.tag}`);
 });
 
-if (process.env.NODE_ENV == "development") {
+if (process.env.NODE_ENV === "development") {
   dotsimus.on("debug", (message) => {
     console.debug(message);
   });
