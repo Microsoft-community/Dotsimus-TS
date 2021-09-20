@@ -5,7 +5,6 @@ import {
 	WebhookEditMessageOptions,
 } from "discord.js";
 import { DotsimusClient } from "../../../structs/DotsimusClient.js";
-import { DotsimusError} from "../../../structs/DotsimusError.js";
 import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder,
@@ -25,14 +24,12 @@ export type Schema =
 	| Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
 
 export class Command {
-	static noPermissionError = new DotsimusError("You do not have permission to run that command.");
-	static unknownCommandError = new DotsimusError("The given command does not exist.");
-
 	client: DotsimusClient;
 	name: string;
 	description: string;
 	schema: Schema = new SlashCommandBuilder();
 	log: pino.Logger;
+	permissions?: bigint[];
 
 	constructor(client: DotsimusClient) {
 		this.client = client;

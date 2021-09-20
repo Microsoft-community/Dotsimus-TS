@@ -23,11 +23,15 @@ export class Commander extends RunPlugin {
 	client: DotsimusClient;
 	commands: Collection<string, Command>;
 
+	// TODO: use database
+	prefixes: string[];
+
 	constructor(client: DotsimusClient) {
 		super(client);
 		this.client = client;
 
 		this.commands = new Collection();
+		this.prefixes = ["!"];
 
 		this.client.on("ready", this.registerSlashCommands.bind(this));
 		this.client.on("interactionCreate", this.onInteraction.bind(this));
@@ -80,7 +84,6 @@ export class Commander extends RunPlugin {
 					content: e.message || "Error occurred while executing command.",
 				});
 			} else {
-				// TODO
 				this.client.log.error(`Failed while executing command ${command.name}`, e);
 			}
 		}

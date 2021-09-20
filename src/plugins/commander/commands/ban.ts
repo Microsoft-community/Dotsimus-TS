@@ -5,6 +5,7 @@ import { Permissions, CommandInteraction, GuildMember, MessageButton, DiscordAPI
 import confirmation from "../../../structs/Confirmation.js";
 import { until } from "@open-draft/until";
 import { nanoid } from "nanoid";
+import { constants } from "../../../constants";
 
 export default class BanCommand extends Command {
 	constructor(bot: DotsimusClient) {
@@ -33,12 +34,12 @@ export default class BanCommand extends Command {
 
 		if (!(interaction.member?.permissions as Permissions).serialize().BAN_MEMBERS) {
 			return interaction.reply({
-				content: "You do not have the sufficient permissions to run this command.",
+				content: constants.missingPerms,
 			});
 		}
 
 		if (!member) return interaction.reply({
-			content: "Invalid member provided",
+			content: constants.invalidMember,
 		});
 
 		await interaction.deferReply();
@@ -47,7 +48,7 @@ export default class BanCommand extends Command {
 		const banId = nanoid();
 
 		const [error, res] = await until(() => confirmation(
-			`Ban ${member.user.username}?`,
+			constants.cmds.ban.prompt + member.user.username + "?",
 			interaction,
 			[
 				new MessageButton()
@@ -62,13 +63,13 @@ export default class BanCommand extends Command {
 		));
 
 		if (error) return interaction.reply({
-			content: `Ban was not confirmed and is now cancelled.`,
+			content: constants.cmds.ban.timedOut,
 			ephemeral: true,
 		});
 
 		if (res?.customId !== banId) {
 			return res!.update({
-				content: "Ban cancelled.",
+				content: constants.cmds.ban.cancelled,
 				components: [],
 			});
 		}
@@ -76,20 +77,20 @@ export default class BanCommand extends Command {
 		try {
 			await interaction.guild?.members.ban(member, { reason });
 			await interaction.editReply({
-				content: "User was banned.",
+				content: constants.cmds.ban.success,
 				components: [],
 			});
 		} catch (e: unknown) {
 			if (e instanceof DiscordAPIError) {
 				if (e.code === 50013) {
 					await interaction.editReply({
-						content: `Missing permissions to ban ${member.user.username}`,
+						content: constants.cmds.ban.missingPerms + member.user.username,
 						components: [],
 					});
 				}
 			}
 			await interaction.editReply({
-				content: "Error occurred while banning",
+				content: constants.cmds.ban.error,
 				components: [],
 			});
 		}

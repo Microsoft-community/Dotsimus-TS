@@ -2,6 +2,8 @@ import { CommandInteraction, MessageEmbed, User } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Command, CommandResponse } from "../structs/Command.js";
 import { DotsimusClient } from "../../../structs/DotsimusClient.js";
+import { DotsimusError } from "../../../structs/DotsimusError";
+import { constants } from "../../../constants";
 
 export default class AboutCommand extends Command {
   constructor(bot: DotsimusClient) {
@@ -52,7 +54,7 @@ export default class AboutCommand extends Command {
       case "usage":
         return this.executeUsage(interaction);
       default:
-        throw Command.unknownCommandError;
+        throw new DotsimusError(constants.unknownCommand);
     }
   }
 
@@ -121,7 +123,7 @@ Roundtrip latency: ${Date.now() - interaction.createdTimestamp}ms`,
         : Boolean(owner.members.get(owner.id));
 
     if (!userIsOwner) {
-      throw Command.noPermissionError;
+      throw new DotsimusError(constants.missingPerms);
     }
 
     await interaction.reply("Restarting...");

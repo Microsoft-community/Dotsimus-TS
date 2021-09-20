@@ -15,11 +15,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "semi": "error",
-    "quotes": ["error", "double", {
-      "avoidEscape": true,
-      "allowTemplateLiterals": true
-    }],
+    "@typescript-eslint/no-non-null-assertion": "off",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
@@ -27,6 +23,11 @@
       "exports": "always-multiline",
       "functions": "never"
     }],
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "eqeqeq": "error",
+    "quotes": ["error", "double", {
+      "avoidEscape": true,
+      "allowTemplateLiterals": true
+    }],
+    "semi": "error"
   }
 }
