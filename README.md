@@ -1,3 +1,2 @@
 # Dotsimus - TypeScript rewrite
-
-Lorem ipsum dolor sit amet.
+Imagine a bot named [Dotsimus](https://github.com/Microsoft-community/Dotsimus)
