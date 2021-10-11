@@ -5,7 +5,7 @@ import { Permissions, CommandInteraction, GuildMember, MessageButton, DiscordAPI
 import confirmation from "../../../structs/Confirmation.js";
 import { until } from "@open-draft/until";
 import { nanoid } from "nanoid";
-import { constants } from "../../../constants";
+import { constants } from "../../../constants.js";
 
 export default class BanCommand extends Command {
 	constructor(bot: DotsimusClient) {
@@ -33,14 +33,10 @@ export default class BanCommand extends Command {
 		const reason = interaction.options.getString("reason", false) as string | undefined;
 
 		if (!(interaction.member?.permissions as Permissions).serialize().BAN_MEMBERS) {
-			return interaction.reply({
-				content: constants.missingPerms,
-			});
+			return interaction.reply(constants.missingPerms);
 		}
 
-		if (!member) return interaction.reply({
-			content: constants.invalidMember,
-		});
+		if (!member) return interaction.reply(constants.invalidMember);
 
 		await interaction.deferReply();
 

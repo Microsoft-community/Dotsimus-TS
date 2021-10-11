@@ -29,7 +29,6 @@ export class Command {
 	description: string;
 	schema: Schema = new SlashCommandBuilder();
 	log: pino.Logger;
-	permissions?: bigint[];
 
 	constructor(client: DotsimusClient) {
 		this.client = client;
