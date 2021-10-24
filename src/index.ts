@@ -15,7 +15,7 @@ async function main() {
     await dotsimus.commander.loadCommands(path.join(process.cwd(), "src", "plugins", "commander", "commands"));
   }
 
-  dotsimus.login(process.env.DISCORD_TOKEN).catch();
+  await dotsimus.start(process.env.DISCORD_TOKEN as string, process.env.DB_HOST as string).catch();
 }
 
 void async function() {

@@ -4,6 +4,8 @@ import { Plugin } from "./Plugin";
 import { RunPlugin } from "./RunPlugin";
 import { logger } from "../logger.js";
 import { Commander } from "../plugins/commander";
+import { MongoClient } from "mongodb";
+import { Database } from "../database/Database";
 import pino from "pino";
 
 import fs from "node:fs";
@@ -14,6 +16,7 @@ export class DotsimusClient extends Client {
 	commander?: Commander;
 	#loggedIn: boolean;
 	log: pino.Logger = logger;
+	database?: Database;
 
 	constructor() {
 		super({
@@ -55,11 +58,13 @@ export class DotsimusClient extends Client {
 		}
 	}
 
-	login(token?: string): Promise<string> {
+	async start(token: string, mongoUrl: string) {
 		if (this.#loggedIn) throw new Error("Already logged in.");
 
 		this.#loggedIn = true;
-		return super.login(token);
+		var client = new MongoClient(mongoUrl)
+		this.database = new Database(await client.db());
+		super.login(token);
 	}
 }
 
