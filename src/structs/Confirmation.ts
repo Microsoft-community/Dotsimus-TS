@@ -1,4 +1,5 @@
 import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton } from "discord.js";
+import { MessageComponentTypes } from "discord.js/typings/enums";
 
 export default async function confirmation(
 	question: string,
@@ -17,9 +18,8 @@ export default async function confirmation(
 	});
 
 	const filter = (i: ButtonInteraction) => i.user.id === interaction.user.id;
-	return interaction.channel?.awaitMessageComponent<"BUTTON">({
+	return interaction.channel?.awaitMessageComponent<MessageComponentTypes.BUTTON>({
 		filter,
-		componentType: "BUTTON",
 		time: options?.time || 15000,
 	});
 }
