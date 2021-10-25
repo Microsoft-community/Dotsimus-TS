@@ -62,7 +62,8 @@ export class DotsimusClient extends Client {
 		if (this.#loggedIn) throw new Error("Already logged in.");
 
 		this.#loggedIn = true;
-		var client = new MongoClient(mongoUrl)
+		var client = new MongoClient(mongoUrl);
+		await client.connect();
 		this.database = new Database(await client.db());
 		super.login(token);
 	}
