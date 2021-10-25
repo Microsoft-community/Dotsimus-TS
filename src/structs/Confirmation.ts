@@ -17,7 +17,7 @@ export default async function confirmation(
 	});
 
 	const filter = (i: ButtonInteraction) => i.user.id === interaction.user.id;
-	return interaction.channel?.awaitMessageComponent({
+	return interaction.channel?.awaitMessageComponent<"BUTTON">({
 		filter,
 		componentType: "BUTTON",
 		time: options?.time || 15000,
