@@ -103,7 +103,7 @@ export default class AboutCommand extends Command {
   }
 
   async executePing(interaction: CommandInteraction) {
-    var originalReply = await interaction.reply({ 
+    const originalReply = await interaction.reply({ 
       content: "Pinging...",
       fetchReply: true
     }) as Message;
