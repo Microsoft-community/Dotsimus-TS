@@ -168,3 +168,6 @@ data/*
 
 # macOS DS Store
 .DS_Store
+
+# Output files
+build

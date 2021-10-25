@@ -58,10 +58,9 @@ export class Commander extends RunPlugin {
 			await rest.put(
 				Routes.applicationCommands(this.client.application.id),
 				{
-					body: slashCommands,
+					body: slashCommands
 				}
 			);
-
 			this.client.log.debug(`Registered ${commands.length} slash commands.`);
 		} catch(e) {
 			this.client.log.error("Failed while registering slash commands", e);

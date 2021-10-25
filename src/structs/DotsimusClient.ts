@@ -5,7 +5,7 @@ import { RunPlugin } from "./RunPlugin";
 import { logger } from "../logger.js";
 import { Commander } from "../plugins/commander";
 import { MongoClient } from "mongodb";
-import { Database } from "../database/Database";
+import { Database } from "../database/Database.js";
 import pino from "pino";
 
 import fs from "node:fs";

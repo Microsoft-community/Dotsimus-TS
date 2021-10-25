@@ -2,8 +2,8 @@ import { CommandInteraction, MessageEmbed, User } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Command, CommandResponse } from "../structs/Command.js";
 import { DotsimusClient } from "../../../structs/DotsimusClient.js";
-import { DotsimusError } from "../../../structs/DotsimusError";
-import { constants } from "../../../constants";
+import { DotsimusError } from "../../../structs/DotsimusError.js";
+import { constants } from "../../../constants.js";
 
 export default class AboutCommand extends Command {
   constructor(bot: DotsimusClient) {
