@@ -104,6 +104,7 @@ export class Commander extends RunPlugin {
 				const Command = await import(p);
 				this.loadCommand(Command.default, file);
 			} catch (e) {
+				this.client.log.error((e as Error).message);
 				this.client.log.error(`Failure while parsing command: ${file}.js`, e);
 			}
 		}

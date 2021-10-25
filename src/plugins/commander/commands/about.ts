@@ -131,8 +131,6 @@ Roundtrip latency: ${Date.now() - interaction.createdTimestamp}ms`,
   }
 
   private executeUsage(interaction: CommandInteraction): Promise<void> {
-    return interaction.reply({
-      content: `Not yet implemented.`,
-    });
+    return interaction.reply("Not yet implemented");
   }
 }
