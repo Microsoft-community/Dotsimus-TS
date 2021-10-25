@@ -100,6 +100,9 @@ export class Commander extends RunPlugin {
 		for (const file of files) {
 			const p = path.join(dir, `${file}.js`);
 
+			if (p.endsWith(".d.js"))
+				break;
+
 			try {
 				const Command = await import(p);
 				this.loadCommand(Command.default, file);
