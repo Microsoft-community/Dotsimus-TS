@@ -17,4 +17,4 @@ services:
       - .env
     depends_on:
       - mongo
-    restart: on_failure
+    restart: 'no'
