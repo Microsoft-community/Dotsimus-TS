@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed, User } from "discord.js";
+import { CommandInteraction, Message, MessageEmbed, User } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Command, CommandResponse } from "../structs/Command.js";
 import { DotsimusClient } from "../../../structs/DotsimusClient.js";
@@ -102,11 +102,13 @@ export default class AboutCommand extends Command {
     });
   }
 
-  private executePing(interaction: CommandInteraction): Promise<void> {
-    return interaction.reply({
-        content: `Websocket heartbeat: ${this.client.ws.ping}ms
-Roundtrip latency: ${Date.now() - interaction.createdTimestamp}ms`,
-    });
+  async executePing(interaction: CommandInteraction) {
+    var originalReply = await interaction.reply({ 
+      content: "Pinging...",
+      fetchReply: true
+    }) as Message;
+
+    await interaction.editReply(`Websocket heartbeat: ${this.client.ws.ping}ms\nRoundtrip latency: ${originalReply.createdTimestamp - interaction.createdTimestamp}ms`);
   }
 
   private async executeRestart(

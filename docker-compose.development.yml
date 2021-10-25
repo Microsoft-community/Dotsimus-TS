@@ -12,11 +12,13 @@ services:
         source: ./data
         target: /data/db
   bot:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.development
     depends_on:
       - mongo
     restart: 'on-failure'
     volumes:
       - type: bind
         source: ./.env
-        target: /.env
+        target: /app/.env

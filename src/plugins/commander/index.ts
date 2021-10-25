@@ -56,7 +56,9 @@ export class Commander extends RunPlugin {
 
 		try {
 			await rest.put(
-				Routes.applicationCommands(this.client.application.id),
+				process.env.NODE_ENV === "production"
+					? Routes.applicationCommands(this.client.application.id)
+					: Routes.applicationGuildCommands(this.client.application.id, process.env.DEV_GUILD as string),
 				{
 					body: slashCommands
 				}

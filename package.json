@@ -8,8 +8,7 @@
   "license": "gpl-v3",
   "private": false,
   "scripts": {
-    "start": "NODE_ENV=production node ./build/index.js",
-    "build": "tsc",
+    "start": "tsc && NODE_ENV=production node ./build/index.js",
     "dev": "NODE_ENV=development node --loader ts-node/esm ./src/index.ts | pino-pretty -c -t -i hostname,pid"
   },
   "devDependencies": {
