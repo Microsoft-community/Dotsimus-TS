@@ -6,6 +6,7 @@ import confirmation from "../../../structs/Confirmation.js";
 import { until } from "@open-draft/until";
 import { nanoid } from "nanoid";
 import { constants } from "../../../constants.js";
+import { MessageButtonStyles } from "discord.js/typings/enums";
 
 export default class BanCommand extends Command {
 	constructor(bot: DotsimusClient) {
@@ -49,11 +50,11 @@ export default class BanCommand extends Command {
 			[
 				new MessageButton()
 					.setCustomId(cancelId)
-					.setStyle("PRIMARY")
+					.setStyle(MessageButtonStyles.PRIMARY)
 					.setLabel("Cancel"),
 				new MessageButton()
 					.setCustomId(banId)
-					.setStyle("DANGER")
+					.setStyle(MessageButtonStyles.DANGER)
 					.setLabel("Confirm"),
 			]
 		));
