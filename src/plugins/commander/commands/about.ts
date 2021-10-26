@@ -60,9 +60,8 @@ export default class AboutCommand extends Command {
 
   private executeMe(interaction: CommandInteraction): Promise<void> {
     const guilds = this.client.guilds.cache;
-    const totalMemberCount: number = guilds.reduce((acc, guild) => {
-      return acc + guild.memberCount;
-    });
+    const totalMemberCount: number = guilds.reduce((a, b) => a + b.memberCount, 0);
+
     const embed = new MessageEmbed({
       title: "Dotsimus",
       description:
