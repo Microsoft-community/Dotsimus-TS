@@ -102,10 +102,7 @@ export default class AboutCommand extends Command {
   }
 
   async executePing(interaction: CommandInteraction) {
-    const originalReply = await interaction.reply({ 
-      content: "Pinging...",
-      fetchReply: true
-    }) as Message;
+    const originalReply = await interaction.deferReply({ fetchReply: true }) as Message;
 
     await interaction.editReply(`Websocket heartbeat: ${this.client.ws.ping}ms\nRoundtrip latency: ${originalReply.createdTimestamp - interaction.createdTimestamp}ms`);
   }
