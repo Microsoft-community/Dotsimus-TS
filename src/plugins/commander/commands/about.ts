@@ -60,7 +60,7 @@ export default class AboutCommand extends Command {
 
   private executeMe(interaction: CommandInteraction): Promise<void> {
     const guilds = this.client.guilds.cache;
-    const totalMemberCount: number = guilds.reduce((a, b) => a + b.memberCount, 0);
+    const totalMemberCount = guilds.flatMap(f => f.members.cache).filter(f => !f.user.bot).size;
 
     const embed = new MessageEmbed({
       title: "Dotsimus",
@@ -110,7 +110,7 @@ export default class AboutCommand extends Command {
   private async executeRestart(
     interaction: CommandInteraction
   ): Promise<CommandResponse> {
-    const owner = this.client.application?.owner;
+    const { owner } = await this.client.application!.fetch();
     if (!owner) {
       throw new Error("Dotsimus cannot find the bot's owner.");
     }

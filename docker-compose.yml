@@ -15,7 +15,7 @@ services:
     build: .
     depends_on:
       - mongo
-    restart: 'on-failure'
+    restart: 'always'
     volumes:
       - type: bind
         source: ./.env
