@@ -56,12 +56,13 @@ export class Commander extends RunPlugin {
 
 		try {
 			await rest.put(
-				Routes.applicationCommands(this.client.application.id),
+				process.env.NODE_ENV === "production"
+					? Routes.applicationCommands(this.client.application.id)
+					: Routes.applicationGuildCommands(this.client.application.id, process.env.DEV_GUILD as string),
 				{
-					body: slashCommands,
+					body: slashCommands
 				}
 			);
-
 			this.client.log.debug(`Registered ${commands.length} slash commands.`);
 		} catch(e) {
 			this.client.log.error("Failed while registering slash commands", e);
@@ -101,10 +102,14 @@ export class Commander extends RunPlugin {
 		for (const file of files) {
 			const p = path.join(dir, `${file}.js`);
 
+			if (p.endsWith(".d.js"))
+				break;
+
 			try {
 				const Command = await import(p);
 				this.loadCommand(Command.default, file);
 			} catch (e) {
+				this.client.log.error((e as Error).message);
 				this.client.log.error(`Failure while parsing command: ${file}.js`, e);
 			}
 		}
